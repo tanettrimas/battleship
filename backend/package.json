@@ -1,0 +1,40 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "lint": "eslint src/**.*",
+    "lint:fix": "eslint src/**.* --fix",
+    "start": "tsc && node dist/index.js",
+    "ts-compile": "tsc",
+    "dev": "nodemon",
+    "sandbox": "nodemon --exec ts-node ./src/sandbox/index.ts"
+  },
+  "keywords": [],
+  "author": "Tanet Trimas <tanet@trimas.no>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.5",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.10.0",
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.3",
+    "ts-jest": "^25.5.1",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.6",
+    "@types/morgan": "^1.9.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  }
+}
