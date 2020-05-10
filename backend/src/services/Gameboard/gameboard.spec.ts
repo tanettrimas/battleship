@@ -42,7 +42,6 @@ describe('Gameboard', () => {
       { letter: 'A', number: 4 },
     ];
     Gameboard.placeShip(coordinates);
-
     const actualHit = Gameboard.recieveAttack({ letter: 'A', number: 5 });
     const missedHit = Gameboard.recieveAttack({ letter: 'C', number: 6 });
     expect(actualHit).toBe(true);
@@ -54,17 +53,28 @@ describe('Gameboard', () => {
   });
 
   it('should be able to report whether or not all of their ships have been sunk', () => {
-    const coordinates: GameboardCoordinates[] = [
+    const coordinates1: GameboardCoordinates[] = [
       { letter: 'A', number: 5 },
       { letter: 'A', number: 6 },
       { letter: 'A', number: 4 },
     ];
-    Gameboard.placeShip(coordinates);
+
+    const coordinates2: GameboardCoordinates[] = [
+      { letter: 'B', number: 5 },
+      { letter: 'B', number: 6 },
+      { letter: 'B', number: 4 },
+    ];
+    Gameboard.placeShip(coordinates1);
+    Gameboard.placeShip(coordinates2);
     Gameboard.recieveAttack({ letter: 'A', number: 5 });
     expect(Gameboard.isAllShipsSunk()).toBe(false);
     Gameboard.recieveAttack({ letter: 'A', number: 6 });
     Gameboard.recieveAttack({ letter: 'A', number: 4 });
+    Gameboard.recieveAttack({ letter: 'B', number: 6 });
+    Gameboard.recieveAttack({ letter: 'B', number: 4 });
     expect(Gameboard.isAllShipsSunk()).toBe(false);
+    Gameboard.recieveAttack({ letter: 'B', number: 5 });
+    expect(Gameboard.isAllShipsSunk()).toBe(true);
   });
 
   it.todo('should not place ship at existing location');

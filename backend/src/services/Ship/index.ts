@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import { Shipper, direction, ShipCoordinates } from './ship.types';
 
 class Ship implements Shipper {
-
   private _shipDirection: direction
 
   private _coordinates!: ShipCoordinates[]
@@ -15,6 +14,10 @@ class Ship implements Shipper {
     this._id = crypto.randomBytes(20).toString('hex');
     this._shipDirection = shipDirection;
     this.setCoordinates(coordinates);
+  }
+
+  static clearStorage(): void {
+    this.shipStorage = [];
   }
 
   static getShip(id: string) {

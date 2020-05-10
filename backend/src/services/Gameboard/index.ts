@@ -20,6 +20,7 @@ class Gameboard {
   }
 
   static clearGameboard() {
+    Ship.clearStorage();
     this.matrix.clear();
   }
 
