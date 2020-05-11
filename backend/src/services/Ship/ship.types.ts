@@ -1,3 +1,5 @@
+import { GameboardCoordinates } from '../Gameboard/gameboard.types';
+
 export interface Shipper {
   hit(position: number): void
   isSunk(): boolean
@@ -5,7 +7,7 @@ export interface Shipper {
 
 export interface ShipCoordinates {
   hit?: boolean,
-  number: number
+  coords: GameboardCoordinates
 }
 
 export type direction = 'horizontal' | 'vertical';
