@@ -32,6 +32,24 @@ describe('Ship', () => {
     expect(ship2.length).toBe(2);
   });
 
+  it('should not allow duplicate coordinates', () => {
+    const ship = new Ship('vertical', [
+      {
+        letter: 'B',
+        number: 5,
+      },
+      {
+        letter: 'B',
+        number: 5,
+      },
+      {
+        letter: 'B',
+        number: 6,
+      },
+    ]);
+
+    expect(ship.length).toBe(2);
+  });
 
   it('should be able to take a hit', () => {
     const ship = new Ship('horizontal', [

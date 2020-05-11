@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
-import { GameboardCoordinates } from './gameboard.types';
+import { GameboardCoordinates, Gameboardes } from './gameboard.types';
 import Ship from '../Ship';
 
-class Gameboard {
+class Gameboard implements Gameboardes {
   private matrix: Map<string, (number | string)[]> = new Map()
 
-  private MATRIX_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+  public MATRIX_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
 
-  private MATRIX_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  public MATRIX_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   constructor() {
     this.createMatrix(this.matrix);

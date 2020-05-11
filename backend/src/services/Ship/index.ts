@@ -38,13 +38,19 @@ class Ship implements Shipper {
       throw new Error('Length cannot be greater than 5 or smaller than 2');
     }
 
-    const coords = [...new Set(coordinates)].map(({ number, letter }) => ({
-      coords: {
-        number,
-        letter,
-      },
-      hit: false,
-    }));
+    const stringCoordinates = coordinates.map((cord) => `${cord.letter}${cord.number}`);
+
+    const coords = [...new Set(stringCoordinates)].map((cord) => {
+      const [letter, ...number] = cord.split('');
+      return {
+        coords: {
+          number: parseInt(number.join(''), 10),
+          letter,
+          stringCoordinate: cord,
+        },
+        hit: false,
+      };
+    });
 
     this._coordinates = coords;
   }

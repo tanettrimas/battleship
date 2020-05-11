@@ -3,16 +3,16 @@ import Computer from './Computer';
 import Gameboard from '../Gameboard';
 
 describe('Player', () => {
-  it('should be defined', () => {
-    const player = new Player();
-    expect(player).toBeDefined();
-  });
+  let player: Player;
+  let computer: Computer;
+  let computerBoard: Gameboard;
+  let playerBoard: Gameboard;
 
-  it('should be able to play a game', () => {
-    const playerBoard = new Gameboard();
-    const computerBoard = new Gameboard();
-    const player = new Player();
-    const computer = new Computer();
+  beforeEach(() => {
+    playerBoard = new Gameboard();
+    computerBoard = new Gameboard();
+    player = new Player(computerBoard);
+    computer = new Computer(playerBoard);
 
     playerBoard.placeShip([
       {
@@ -35,17 +35,40 @@ describe('Player', () => {
         number: 3,
       },
     ]);
+  });
 
-    player.takeTurn(computerBoard, {
+  afterEach(() => {
+    playerBoard.clearGameboard();
+    computerBoard.clearGameboard();
+  });
+
+  it('should be defined', () => {
+    expect(player).toBeDefined();
+  });
+
+  it('should make player take a turn based on given coordinates', () => {
+    player.takeTurn({
       letter: 'C',
-      number: 4,
+      number: 3,
     });
 
-    computer.takeTurn(playerBoard, {
-      letter: 'A',
-      number: 2,
-    });
-    expect(playerBoard.getBoardRow('A')).toContain('hit');
-    expect(computerBoard.getBoardRow('C')).toContain('missed');
+    expect(computerBoard.getBoardRow('C')).toContain('hit');
+  });
+
+  it('should make computer take a random turn', () => {
+    computer.takeTurn();
+    computer.takeTurn();
+    expect(computer.turnCount).toBe(2);
+  });
+
+  it('should not make the same turn twice', () => {
+    for (let i = 0; i < 99; i += 1) {
+      computer.takeTurn();
+    }
+    expect(computer.previousTurns.length).not.toBe(computer.turnCount);
+    const [, first, second] = playerBoard.getBoardRow('A');
+    // You cannot miss a boat if it exists on the board
+    expect(first).not.toBe('missed');
+    expect(second).not.toBe('missed');
   });
 });
