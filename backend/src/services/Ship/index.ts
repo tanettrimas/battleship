@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { Shipper, direction, ShipCoordinates } from './ship.types';
+import { GameboardCoordinates } from '../Gameboard/gameboard.types';
 
 class Ship implements Shipper {
   private _shipDirection: direction
@@ -10,7 +11,7 @@ class Ship implements Shipper {
 
   private static shipStorage: Ship[] = [];
 
-  constructor(shipDirection: direction, coordinates: number[]) {
+  constructor(shipDirection: direction, coordinates: GameboardCoordinates[]) {
     this._id = crypto.randomBytes(20).toString('hex');
     this._shipDirection = shipDirection;
     this.setCoordinates(coordinates);
@@ -32,13 +33,16 @@ class Ship implements Shipper {
     this.shipStorage.push(ship);
   }
 
-  private setCoordinates(coordinates: number[]) {
-    if (coordinates.length > 5) {
-      throw new Error('Length cannot be greater than 5');
+  private setCoordinates(coordinates: GameboardCoordinates[]) {
+    if (coordinates.length > 5 || coordinates.length < 2) {
+      throw new Error('Length cannot be greater than 5 or smaller than 2');
     }
 
-    const coords = [...new Set(coordinates)].map((coord) => ({
-      number: coord,
+    const coords = [...new Set(coordinates)].map(({ number, letter }) => ({
+      coords: {
+        number,
+        letter,
+      },
       hit: false,
     }));
 
@@ -62,7 +66,7 @@ class Ship implements Shipper {
   }
 
   hit(position: number): boolean {
-    const index = this._coordinates.findIndex((coord) => coord.number === position);
+    const index = this._coordinates.findIndex(({ coords: { number } }) => number === position);
     if (index === -1) {
       return false;
     }

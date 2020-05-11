@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { GameboardCoordinates } from './gameboard.types';
 import Ship from '../Ship';
 
@@ -32,14 +33,16 @@ class Gameboard {
   }
 
   static placeShip(cords: GameboardCoordinates[]): boolean {
-    const numberCoordinates = cords.map((cord) => cord.number);
     // TODO: Fix this hack..
     const shipDirection = cords.every((cord) => cord.letter === cords[0].letter) ? 'vertical' : 'horizontal';
-    const ship = new Ship(shipDirection, numberCoordinates);
+    const ship = new Ship(shipDirection, cords);
+    const shipStorage = Ship.getStorage();
+    this.checkIfShipExists({ shipStorage, cordsData: cords });
     Ship.setShipStorage(ship);
     cords.forEach((cord) => {
       const position = this.matrix.get(cord.letter)!;
       const newPosition = position.map((pos) => {
+        // This makes sure the matrix updates with the ships id in the place where it has been put
         if (pos === cord.number) {
           return ship.id;
         }
@@ -67,11 +70,27 @@ class Gameboard {
     return true;
   }
 
-  // eslint-disable-next-line max-len
-  static updateBoardState(letter: string, boardRow: (string | number)[], index: number, didHit: boolean): void {
+  private static updateBoardState(letter: string, boardRow: (string | number)[], index: number, didHit: boolean): void {
     const newBoard = [...boardRow];
     newBoard[index] = didHit ? 'hit' : 'missed';
     this.matrix.set(letter, newBoard);
+  }
+
+  private static checkIfShipExists({ shipStorage, cordsData }: { shipStorage: Ship[]; cordsData: GameboardCoordinates[]; }) {
+    let shipExists = false;
+    if (shipStorage.length) {
+      const coordinatesFromShipStorage = shipStorage
+        .map((shipStorageItem) => shipStorageItem.coordinates)
+        .map((coordinates) => coordinates.map(({ coords }) => coords));
+      // eslint-disable-next-line no-restricted-syntax
+      for (const cord of coordinatesFromShipStorage) {
+        shipExists = cord
+          .some((cData) => cordsData.find((c) => cData.number === c.number && c.letter === cData.letter));
+      }
+      if (shipExists) {
+        throw new Error('Cannot place battleship in position of existing battleship!');
+      }
+    }
   }
 
 

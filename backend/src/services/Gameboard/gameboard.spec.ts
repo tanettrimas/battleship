@@ -60,9 +60,9 @@ describe('Gameboard', () => {
     ];
 
     const coordinates2: GameboardCoordinates[] = [
-      { letter: 'B', number: 5 },
-      { letter: 'B', number: 6 },
-      { letter: 'B', number: 4 },
+      { letter: 'B', number: 3 },
+      { letter: 'B', number: 2 },
+      { letter: 'B', number: 1 },
     ];
     Gameboard.placeShip(coordinates1);
     Gameboard.placeShip(coordinates2);
@@ -70,12 +70,32 @@ describe('Gameboard', () => {
     expect(Gameboard.isAllShipsSunk()).toBe(false);
     Gameboard.recieveAttack({ letter: 'A', number: 6 });
     Gameboard.recieveAttack({ letter: 'A', number: 4 });
-    Gameboard.recieveAttack({ letter: 'B', number: 6 });
-    Gameboard.recieveAttack({ letter: 'B', number: 4 });
+    Gameboard.recieveAttack({ letter: 'B', number: 2 });
+    Gameboard.recieveAttack({ letter: 'B', number: 3 });
     expect(Gameboard.isAllShipsSunk()).toBe(false);
-    Gameboard.recieveAttack({ letter: 'B', number: 5 });
+    Gameboard.recieveAttack({ letter: 'B', number: 1 });
     expect(Gameboard.isAllShipsSunk()).toBe(true);
   });
 
-  it.todo('should not place ship at existing location');
+  it('should not place ship at existing location', () => {
+    const coordinates1: GameboardCoordinates[] = [
+      { letter: 'A', number: 5 },
+      { letter: 'A', number: 6 },
+      { letter: 'A', number: 4 },
+    ];
+    Gameboard.placeShip(coordinates1);
+    const coordinates2: GameboardCoordinates[] = [
+      { letter: 'A', number: 5 },
+      { letter: 'A', number: 6 },
+    ];
+    expect(() => {
+      Gameboard.placeShip(coordinates2);
+    }).toThrowError('Cannot place battleship in position of existing battleship!');
+    const coordinates3: GameboardCoordinates[] = [
+      { letter: 'B', number: 4 },
+      { letter: 'B', number: 5 },
+      { letter: 'B', number: 6 },
+    ];
+    Gameboard.placeShip(coordinates3);
+  });
 });
