@@ -3,36 +3,36 @@ import { GameboardCoordinates } from './gameboard.types';
 import Ship from '../Ship';
 
 class Gameboard {
-  private static matrix: Map<string, (number | string)[]> = new Map()
+  private matrix: Map<string, (number | string)[]> = new Map()
 
-  private static MATRIX_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+  private MATRIX_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
 
-  private static MATRIX_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  private MATRIX_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-  private static createMatrix(matrix: Map<string, (number | string)[]>) {
+  constructor() {
+    this.createMatrix(this.matrix);
+  }
+
+  private createMatrix(matrix: Map<string, (number | string)[]>) {
     this.MATRIX_LETTERS.forEach((letter) => {
       matrix.set(letter, this.MATRIX_NUMBERS);
     });
     this.matrix = matrix;
   }
 
-  static createGameboard() {
-    this.createMatrix(this.matrix);
-  }
-
-  static clearGameboard() {
+  clearGameboard() {
     Ship.clearStorage();
     this.matrix.clear();
   }
 
-  static getBoardRow(letter: string): (string | number)[] {
+  getBoardRow(letter: string): (string | number)[] {
     if (!this.MATRIX_LETTERS.includes(letter)) {
       throw new Error(`Outside of valid range [${this.MATRIX_LETTERS[0]}-${this.MATRIX_LETTERS[this.MATRIX_LETTERS.length - 1]}]`);
     }
     return this.matrix.get(letter)!;
   }
 
-  static placeShip(cords: GameboardCoordinates[]): boolean {
+  placeShip(cords: GameboardCoordinates[]): boolean {
     // TODO: Fix this hack..
     const shipDirection = cords.every((cord) => cord.letter === cords[0].letter) ? 'vertical' : 'horizontal';
     const ship = new Ship(shipDirection, cords);
@@ -53,7 +53,7 @@ class Gameboard {
     return true;
   }
 
-  static recieveAttack(cords: GameboardCoordinates): GameboardCoordinates | true {
+  recieveAttack(cords: GameboardCoordinates): GameboardCoordinates | true {
     // 1. Get coordinates
     // 2. Find the occurence of the ship based on coordinate
     // 3. If found, place a hit on the ship
@@ -70,13 +70,14 @@ class Gameboard {
     return true;
   }
 
-  private static updateBoardState(letter: string, boardRow: (string | number)[], index: number, didHit: boolean): void {
+  private updateBoardState(letter: string, boardRow: (string | number)[], index: number, didHit: boolean): void {
     const newBoard = [...boardRow];
     newBoard[index] = didHit ? 'hit' : 'missed';
     this.matrix.set(letter, newBoard);
   }
 
-  private static checkIfShipExists({ shipStorage, cordsData }: { shipStorage: Ship[]; cordsData: GameboardCoordinates[]; }) {
+  // eslint-disable-next-line class-methods-use-this
+  private checkIfShipExists({ shipStorage, cordsData }: { shipStorage: Ship[]; cordsData: GameboardCoordinates[]; }) {
     let shipExists = false;
     if (shipStorage.length) {
       const coordinatesFromShipStorage = shipStorage
@@ -94,7 +95,8 @@ class Gameboard {
   }
 
 
-  static isAllShipsSunk(): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  isAllShipsSunk(): boolean {
     return Ship.getStorage().every((ship) => ship.isSunk());
   }
 }
