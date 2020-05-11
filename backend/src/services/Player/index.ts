@@ -1,5 +1,6 @@
 import { Playable } from './player.types';
-import { GameboardCoordinates, Gameboardes } from '../Gameboard/gameboard.types';
+import { GameboardCoordinates } from '../Gameboard/gameboard.types';
+import Gameboard from '../Gameboard';
 
 class Player implements Playable {
   public turnCount: number = 0;
@@ -10,7 +11,7 @@ class Player implements Playable {
 
   public matrixNumbers: number[];
 
-  constructor(public gameBoard: Gameboardes) {
+  constructor(public gameBoard: Gameboard) {
     this.gameBoard = gameBoard;
     this.previousTurns = [];
     this.matrixLetters = [...this.gameBoard.MATRIX_LETTERS];
@@ -38,11 +39,11 @@ class Player implements Playable {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public doesCurrentMoveExist(previousTurns: GameboardCoordinates[], cords: GameboardCoordinates): boolean {
+  doesCurrentMoveExist(previousTurns: GameboardCoordinates[], cords: GameboardCoordinates): boolean {
     return previousTurns.length > 0 && previousTurns.some((turn) => turn.letter === cords.letter && turn.number === cords.number);
   }
 
-  public setPreviousTurn(cords: GameboardCoordinates): boolean {
+  setPreviousTurn(cords: GameboardCoordinates): boolean {
     this.previousTurns.push(cords);
     this.previousTurns = this.previousTurns.sort((a, b) => a.letter.localeCompare(b.letter));
     return true;

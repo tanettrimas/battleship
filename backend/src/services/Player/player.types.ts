@@ -1,6 +1,7 @@
-import { GameboardCoordinates, Gameboardes } from '../Gameboard/gameboard.types';
+import { GameboardCoordinates } from '../Gameboard/gameboard.types';
 
 export interface Playable {
-  gameBoard: Gameboardes;
   takeTurn(cords: GameboardCoordinates): true | GameboardCoordinates;
+  doesCurrentMoveExist(previousTurns: GameboardCoordinates[], cords: GameboardCoordinates): boolean;
+  setPreviousTurn(cords: GameboardCoordinates): boolean;
 }
